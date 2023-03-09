@@ -1,0 +1,21 @@
+import { useRouter } from 'next/router';
+
+function CLientProjectsPage() {
+  const router = useRouter();
+
+  function loadProjectHandler() {
+    router.push({
+      pathname: '[id]/[clientprojectid]',
+      query: {id: 'max', clientprojectid: 'project-a'},
+    });
+  }
+
+  return (
+    <div>
+      <h1>The Project of a Given Client</h1>
+      <button onClick={loadProjectHandler}>Load Project A</button>
+    </div>
+  )
+}
+
+export default CLientProjectsPage;
