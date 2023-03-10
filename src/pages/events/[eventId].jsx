@@ -1,3 +1,4 @@
+import ErrorAlert from '@/components/ui/ErrorAlert';
 import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { getEventById } from '../../../dummy-data';
@@ -10,7 +11,9 @@ function EventDetailPage() {
   const event = getEventById(router.query.eventId);
 
   if(!event) {
-    return <p>No event found!</p>;
+    return <ErrorAlert>
+      <p>No event found!</p>
+    </ErrorAlert>;
   }
 
   return (
