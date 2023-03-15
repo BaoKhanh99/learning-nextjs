@@ -1,4 +1,5 @@
 import fs from 'fs';
+import Link from 'next/link';
 import path from 'path';
 
 function HomePage(props) {
@@ -8,7 +9,9 @@ function HomePage(props) {
     <ul>
       {products.map((product) => (
         <li key={product.id}>
-          {product.title}
+          <Link href={`/${product.id}`}>
+            {product.title}
+          </Link>
         </li>
       ))}
     </ul>
@@ -23,7 +26,8 @@ export async function getStaticProps() {
   return {
     props: {
      products: data.products
-    }
+    },
+    revalidate: 10,
   }
 }
 
