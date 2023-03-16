@@ -1,36 +1,34 @@
 import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 function LastSalesPage() {
   const [sales, setSales] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+
+  const { data, error } = useSWR(process.env.NEXT_PUBLIC_FIREBASE, fetcher);
 
   useEffect(() => {
-    setIsLoading(true);
+    if (data) {
+      const transformedSales = [];
 
-    fetch(process.env.NEXT_PUBLIC_FIREBASE)
-      .then((response) => response.json())
-      .then((data) => {
-        const transformedSales = [];
+      for (const key in data) {
+        transformedSales.push({
+          id: key,
+          userName: data[key].userName,
+          volume: data[key].volume,
+        });
+      }
 
-        for (const key in data) {
-          transformedSales.push({
-            id: key,
-            userName: data[key].userName,
-            volume: data[key].volume,
-          });
-        }
+      setSales(transformedSales);
+    }
+  }, [data])
 
-        setSales(transformedSales);
-        setIsLoading(false);
-      });
-  }, []);
-
-  if (isLoading) {
-    return <p>Loading...</p>;
+  if (error) {
+    return <p>No data yet!!!</p>;
   }
 
-  if (!sales) {
-    return <p>No data yet!!!</p>;
+  if (!sales || !data) {
+    return <p>Loading...</p>;
   }
 
   return (
