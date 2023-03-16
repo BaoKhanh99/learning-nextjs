@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
-function LastSalesPage() {
-  const [sales, setSales] = useState();
+function LastSalesPage(props) {
+  const [sales, setSales] = useState(props.sales);
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   const { data, error } = useSWR(process.env.NEXT_PUBLIC_FIREBASE, fetcher);
@@ -27,7 +27,7 @@ function LastSalesPage() {
     return <p>No data yet!!!</p>;
   }
 
-  if (!sales || !data) {
+  if (!sales && !data) {
     return <p>Loading...</p>;
   }
 
@@ -40,6 +40,22 @@ function LastSalesPage() {
       ))}
     </ul>
   );
+}
+
+export async function getStaticProps() {
+  const response = await fetch(process.env.NEXT_PUBLIC_FIREBASE);
+  const data = await response.json();
+  const transformedSales = [];
+
+  for (const key in data) {
+    transformedSales.push({
+      id: key,
+      userName: data[key].userName,
+      volume: data[key].volume,
+    });
+  }
+
+  return { props: { sales: transformedSales }, revalidate: 10 }
 }
 
 export default LastSalesPage;
