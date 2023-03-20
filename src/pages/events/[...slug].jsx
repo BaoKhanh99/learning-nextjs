@@ -53,14 +53,14 @@ function FilteredEventsPage() {
     filteredMonth < 1 ||
     error
   ) {
-      return <Fragment>
-        <ErrorAlert>
-          <p>Invalid filter. Please adjust your value</p>
-        </ErrorAlert>
-        <div className='center'>
-          <Button link='/events'>Show all Events </Button>
-        </div>
-      </Fragment>
+    return <Fragment>
+      <ErrorAlert>
+        <p>Invalid filter. Please adjust your value</p>
+      </ErrorAlert>
+      <div className='center'>
+        <Button link='/events'>Show all Events </Button>
+      </div>
+    </Fragment>
   }
 
   if (!filteredEvents || filteredEvents.length === 0) {
