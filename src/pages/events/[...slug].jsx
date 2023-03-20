@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import Head from 'next/head';
 
 import Button from '@/components/ui/button';
 import ErrorAlert from '@/components/ui/ErrorAlert';
@@ -54,6 +55,7 @@ function FilteredEventsPage() {
     error
   ) {
     return <Fragment>
+      <Head><title>Invalid filter</title></Head>
       <ErrorAlert>
         <p>Invalid filter. Please adjust your value</p>
       </ErrorAlert>
@@ -65,6 +67,7 @@ function FilteredEventsPage() {
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return <Fragment>
+      <Head><title>No events found</title></Head>
       <ErrorAlert>
         <p>No events found for the chosen filter!</p>
       </ErrorAlert>
@@ -78,6 +81,13 @@ function FilteredEventsPage() {
 
   return (
     <Fragment>
+      <Head>
+        <title>All events for { filteredMonth }/ { filteredYear }</title>
+        <meta
+          name='description'
+          content={ `All events for ${ filteredMonth }/ ${ filteredYear }` }
+        />
+      </Head>
       <ResultsTitle date={date} />
       <EventList items={filteredEvents}></EventList>
     </Fragment>
