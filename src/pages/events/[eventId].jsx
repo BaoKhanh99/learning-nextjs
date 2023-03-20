@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 
-import ErrorAlert from '@/components/ui/ErrorAlert';
 import { getFeaturedEvents, getEventById } from '@/helpers/api-util';
 import EventContent from '../event-detail/EventContent';
 import EventLogistics from '../event-detail/EventLogistics';
@@ -46,9 +45,10 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   const events = await getFeaturedEvents();
   const paths = events.map(event => ({ params: {eventId: event.id} }));
+
   return {
     paths: paths,
-    fallback: true
+    fallback: 'blocking'
   }
 }
 
