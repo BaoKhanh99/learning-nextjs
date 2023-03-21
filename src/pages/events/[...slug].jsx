@@ -32,12 +32,37 @@ function FilteredEventsPage() {
     }
   }, [data]);
 
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name='description'
+        content={ `A list of filtered events` }
+      />
+    </Head>
+  )
+
   if(!loadedEvents) {
-    return <p className='center'>Loading...</p>
+    return(
+      <Fragment>
+        {pageHeadData}
+        <p className='center'>Loading...</p>
+      </Fragment>
+    )
   }
 
   const filteredYear = +filterData[0];
   const filteredMonth = +filterData[1];
+
+  pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name='description'
+        content={ `All events for ${ filteredMonth }/${ filteredYear }` }
+      />
+    </Head>
+  )
 
   const filteredEvents = loadedEvents.filter((event) => {
     const eventDate = new Date(event.date);
@@ -55,7 +80,7 @@ function FilteredEventsPage() {
     error
   ) {
     return <Fragment>
-      <Head><title>Invalid filter</title></Head>
+      {pageHeadData}
       <ErrorAlert>
         <p>Invalid filter. Please adjust your value</p>
       </ErrorAlert>
@@ -67,7 +92,7 @@ function FilteredEventsPage() {
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return <Fragment>
-      <Head><title>No events found</title></Head>
+      {pageHeadData}
       <ErrorAlert>
         <p>No events found for the chosen filter!</p>
       </ErrorAlert>
@@ -81,13 +106,7 @@ function FilteredEventsPage() {
 
   return (
     <Fragment>
-      <Head>
-        <title>All events for { filteredMonth }/ { filteredYear }</title>
-        <meta
-          name='description'
-          content={ `All events for ${ filteredMonth }/ ${ filteredYear }` }
-        />
-      </Head>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents}></EventList>
     </Fragment>
